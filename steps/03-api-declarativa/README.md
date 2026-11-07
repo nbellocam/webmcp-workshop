@@ -53,7 +53,7 @@ Recargá y abrí el Inspector. Aparece `search-hotels` con un schema parecido a 
 }
 ```
 
-Cada `<option>` se convierte en un valor del `enum`, con el texto visible como `title`. El modelo tiene la lista cerrada de ciudades y nosotros no escribimos ni una línea de JSON Schema. Por eso las opciones están escritas en el HTML y no cargadas por JavaScript: es lo que el browser lee para armar el schema.
+Cada `<option>` se convierte en un valor del `enum`, con el texto visible como `title`. El modelo tiene la lista cerrada de ciudades, y si igual manda otra, Chrome la rechaza antes de tocar el form (en Chrome 157: `UnknownError: Invalid value "Tokio" for parameter location`). Nosotros no escribimos ni una línea de JSON Schema. Por eso las opciones están escritas en el HTML y no cargadas por JavaScript: es lo que el browser lee para armar el schema.
 
 ## 3.3 Devolverle el resultado al agente
 
