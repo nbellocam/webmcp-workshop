@@ -128,6 +128,15 @@ export function initUI() {
 
   $('#booking').addEventListener('click', async (e) => {
     if (e.target.dataset.remove) removeFromBooking(e.target.dataset.remove);
-    if (e.target.id === 'confirm-button' && (await askForConfirmation(getBooking()))) confirmBooking();
+    if (e.target.id === 'confirm-button') {
+      // Mismo chequeo que el tool: un agente puede cambiar la reserva mientras el diálogo está abierto
+      const shown = getBooking();
+      if (!(await askForConfirmation(shown))) return;
+      if (JSON.stringify(getBooking()) !== JSON.stringify(shown)) {
+        alert('La reserva cambió mientras confirmabas. Revisala y confirmá de nuevo.');
+        return;
+      }
+      confirmBooking();
+    }
   });
 }
