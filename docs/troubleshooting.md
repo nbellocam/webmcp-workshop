@@ -95,6 +95,7 @@ cp app/.env.example app/.env.local
 2. Recargá la pestaña de Rumbo Sur.
 3. Pedile a Claude que llame a `webmcp_list_sources`: tiene que aparecer la pestaña.
 4. Si el origen es otro (por ejemplo, otro puerto), sumalo a `--widget-origin`.
+5. Si el cliente dice que no encuentra `get_hotel_details` pero ves `get_hotel_details_8c9d`, tenés el sitio abierto en más de una pestaña: el relay les agrega un sufijo para distinguirlas. Cerrá las que sobran.
 
 Si el puerto `9333` está ocupado, el relay acepta `--port` y el script, `data-relay-port`; tienen que coincidir.
 

@@ -133,7 +133,7 @@ Después:
 
 El cliente ve cuatro tools propios del relay (`webmcp_list_sources`, `webmcp_list_tools`, `webmcp_call_tool` y `webmcp_open_page`) y los de Rumbo Sur por nombre. Dos detalles:
 
-- El relay **renombra los tools a snake_case**: `get-hotel-details` llega como `get_hotel_details`. Del lado de la página no cambia nada.
+- El relay **renombra los tools a snake_case**: `get-hotel-details` llega como `get_hotel_details`. Si tenés el sitio abierto en más de una pestaña, además les agrega un sufijo por pestaña (`get_hotel_details_8c9d`). Del lado de la página no cambia nada.
 - Los tools dinámicos también viajan: cuando agregás algo a la reserva, `confirm_booking` y `remove_from_booking` aparecen en el cliente. Si cerrás la pestaña, desaparecen todos.
 
 En el workshop de [MCP Toolbox](https://github.com/nbellocam/travel-agent) el agente veía la base de datos. Acá ve tu sitio, con la sesión del usuario y la UI actualizándose en vivo.
