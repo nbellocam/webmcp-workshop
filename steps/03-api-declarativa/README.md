@@ -12,7 +12,7 @@ En `app/index.html`, sumale estos atributos al form de búsqueda:
 <form
   id="search-form"
   toolname="search-hotels"
-  tooldescription="Search hotels in Argentina, Uruguay and Chile by city, country and price tier. Every filter is optional. Returns how many hotels matched and up to 10 of them, with their id."
+  tooldescription="Search hotels in Argentina, Uruguay and Chile by city, country and price tier. Always send the three filters; use an empty string for any filter you do not need, because the form keeps the values of the previous search. Returns how many hotels matched and up to 10 of them, with their id."
   toolautosubmit
 >
 ```
@@ -115,7 +115,7 @@ Ejecutá `search-hotels` desde el Inspector. Si el Inspector muestra una lista v
 | `{"location": "", "country": "Uruguay", "priceTier": "Luxury"}` | `total: 2`: el schema permite combinar filtros |
 | `{"location": "", "country": "", "priceTier": ""}` | `total: 32`, pero vuelven solo los primeros 10 |
 
-En las últimas dos filas los campos van explícitos con `""`: si no los mandás, el form puede conservar lo que tenía de la búsqueda anterior.
+En las últimas dos filas los campos van explícitos con `""`. Lo comprobé en Chrome 157: si después de buscar Bariloche mandás solo `{"country": "Uruguay", "priceTier": "Luxury"}`, el select de ciudad sigue en Bariloche y la búsqueda devuelve 0. El form es estado: el agente completa los campos que manda y deja el resto como estaba. Por eso la descripción del tool le pide que mande siempre los tres filtros.
 
 Archivos de este paso: [`files/index.html`](files/index.html) y [`files/src/webmcp.js`](files/src/webmcp.js).
 

@@ -17,6 +17,7 @@ Lo que se rompió preparando el workshop, con la causa y cómo resolverlo.
 | [T9](#t9-port-5173-is-already-in-use) | `Port 5173 is already in use` | Paso 2 |
 | [T10](#t10-el-asistente-responde-con-un-error-de-gemini) | El asistente responde con un error de Gemini | Paso 6 |
 | [T11](#t11-la-página-queda-en-blanco-y-hay-un-504-outdated-optimize-dep) | La página queda en blanco y hay un `504 (Outdated Optimize Dep)` | Paso 6 |
+| [T12](#t12-la-búsqueda-del-agente-devuelve-0-resultados-sin-motivo) | La búsqueda del agente devuelve 0 resultados sin motivo | Paso 3 |
 
 ## T1: el badge dice "WebMCP no disponible"
 
@@ -151,3 +152,11 @@ if (e.agentInvoked) {
 rm -rf node_modules/.vite
 npm run dev
 ```
+
+## T12: la búsqueda del agente devuelve 0 resultados sin motivo
+
+**Paso**: 3.
+
+**Causa**: el tool declarativo completa solo los campos que manda el agente y deja el resto como estaban. Si antes se buscó Bariloche y ahora el agente manda solo país y categoría, la ciudad sigue en Bariloche.
+
+**Solución**: pedí en la `tooldescription` que mande siempre todos los campos, con `""` para los que no le importan, como hace `search-hotels`. En un form más grande, otra opción es limpiar los campos en el handler de `submit` después de responder, sin usar `reset()` ([T7](#t7-tool-execution-cancelled-by-a-form-reset)).
