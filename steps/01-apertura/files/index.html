@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tareas</title>
+    <style>
+      :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+      body { max-width: 480px; margin: 3rem auto; padding: 0 1rem; }
+      form { display: flex; gap: 0.5rem; }
+      input[type='text'] { flex: 1; }
+      input, button { font: inherit; padding: 0.4rem 0.6rem; }
+      ul { list-style: none; padding: 0; }
+      li { display: flex; gap: 0.5rem; padding: 0.4rem 0; border-bottom: 1px solid #8884; }
+      li.done span { text-decoration: line-through; opacity: 0.6; }
+    </style>
+  </head>
+  <body>
+    <h1>Tareas</h1>
+
+    <!-- Acto 2: el form pasa a ser un tool -->
+    <form
+      id="add-form"
+      toolname="add-todo"
+      tooldescription="Add a new item to the to-do list."
+      toolautosubmit
+    >
+      <input
+        type="text"
+        name="text"
+        placeholder="¿Qué hay que hacer?"
+        toolparamdescription="Text of the to-do item."
+        required
+      />
+      <button>Agregar</button>
+    </form>
+
+    <ul id="list"></ul>
+    <button id="clear">Borrar completadas</button>
+
+    <script type="module">
+      let todos = [
+        { text: 'Preparar la charla de WebMCP', done: true },
+        { text: 'Probar la demo en Chrome', done: false },
+      ];
+
+      const list = document.querySelector('#list');
+      const form = document.querySelector('#add-form');
+
+      // El texto puede venir de un agente: nunca lo metas crudo en innerHTML
+      const escape = (s) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+      function render() {
+        list.innerHTML = todos
+          .map(
+            (t, i) => `<li class="${t.done ? 'done' : ''}">
+              <input type="checkbox" data-i="${i}" ${t.done ? 'checked' : ''} />
+              <span>${escape(t.text)}</span>
+            </li>`,
+          )
+          .join('');
+      }
+
+      function addTodo(text) {
+        todos.push({ text, done: false });
+        render();
+      }
+
+      function clearCompleted() {
+        const before = todos.length;
+        todos = todos.filter((t) => !t.done);
+        render();
+        return before - todos.length;
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = new FormData(form).get('text');
+        addTodo(text);
+        // Acto 2: si lo envió un agente, le contamos qué pasó.
+        // Ojo: reset() cancela la ejecución del tool, así que solo limpiamos el form si lo envió una persona.
+        if (e.agentInvoked) {
+          e.respondWith(Promise.resolve(`Added "${text}". There are ${todos.length} items.`));
+        } else {
+          form.reset();
+        }
+      });
+      list.addEventListener('change', (e) => {
+        todos[e.target.dataset.i].done = e.target.checked;
+        render();
+      });
+      document.querySelector('#clear').addEventListener('click', clearCompleted);
+
+      render();
+
+      // Acto 3: tools imperativos, reusando las mismas funciones que la UI
+      if (document.modelContext) {
+        document.modelContext.registerTool({
+          name: 'list-todos',
+          description: 'List the to-do items and whether each one is done.',
+          inputSchema: { type: 'object', properties: {} },
+          annotations: { readOnlyHint: true },
+          execute: async () => todos,
+        });
+
+        document.modelContext.registerTool({
+          name: 'clear-completed',
+          description: 'Delete every to-do item that is marked as done.',
+          inputSchema: { type: 'object', properties: {} },
+          annotations: { consequentialHint: true },
+          async execute() {
+            if (!confirm('Un agente quiere borrar las tareas completadas. ¿Dale?')) {
+              return 'The user did not allow it. Nothing was deleted.';
+            }
+            return `Deleted ${clearCompleted()} item(s).`;
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

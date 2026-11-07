@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rumbo Sur · Hoteles</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Rumbo Sur</h1>
+      <p>Hoteles en Argentina, Uruguay y Chile · <small>datos ficticios para el workshop</small></p>
+      <span id="webmcp-status" class="badge"></span>
+    </header>
+
+    <main>
+      <section class="search">
+        <h2>Buscar</h2>
+        <form
+          id="search-form"
+          toolname="search-hotels"
+          tooldescription="Search hotels in Argentina, Uruguay and Chile by city, country and price tier. Every filter is optional. Returns how many hotels matched and up to 10 of them, with their id."
+          toolautosubmit
+        >
+          <label>
+            Ciudad
+            <select name="location" toolparamdescription="City where the hotel is located. Leave empty to search every city.">
+              <option value="">Cualquiera</option>
+              <option>Bariloche</option>
+              <option>Buenos Aires</option>
+              <option>Colonia del Sacramento</option>
+              <option>Córdoba</option>
+              <option>Mendoza</option>
+              <option>Montevideo</option>
+              <option>Puerto Varas</option>
+              <option>Punta del Este</option>
+              <option>Rosario</option>
+              <option>Salta</option>
+              <option>Santiago</option>
+              <option>Valparaíso</option>
+              <option>Viña del Mar</option>
+            </select>
+          </label>
+          <label>
+            País
+            <select name="country" toolparamdescription="Country of the hotel. Leave empty to search every country.">
+              <option value="">Cualquiera</option>
+              <option>Argentina</option>
+              <option>Uruguay</option>
+              <option>Chile</option>
+            </select>
+          </label>
+          <label>
+            Categoría
+            <select name="priceTier" toolparamdescription="Hotel price tier, from Luxury (most expensive) to Midscale (cheapest).">
+              <option value="">Cualquiera</option>
+              <option>Luxury</option>
+              <option>Upper Upscale</option>
+              <option>Upscale</option>
+              <option>Upper Midscale</option>
+              <option>Midscale</option>
+            </select>
+          </label>
+          <button type="submit">Buscar</button>
+        </form>
+      </section>
+
+      <section class="results">
+        <h2>Resultados</h2>
+        <ul id="results"></ul>
+        <article id="detail" hidden></article>
+      </section>
+
+      <aside class="booking">
+        <h2>Tu reserva</h2>
+        <div id="booking"></div>
+      </aside>
+    </main>
+
+    <section class="assistant">
+      <h2>Asistente</h2>
+      <div id="agent-messages" aria-live="polite"></div>
+      <form id="agent-form">
+        <fieldset>
+          <input name="message" placeholder="Ej: buscame un hotel de lujo en Bariloche" autocomplete="off" required />
+          <button>Enviar</button>
+        </fieldset>
+      </form>
+    </section>
+
+    <section class="log">
+      <h2>Actividad del agente</h2>
+      <ol id="agent-log" aria-live="polite"></ol>
+    </section>
+
+    <dialog id="confirm-dialog" aria-labelledby="confirm-title">
+      <form method="dialog">
+        <h2 id="confirm-title">¿Confirmás la reserva?</h2>
+        <div id="confirm-summary"></div>
+        <menu>
+          <button value="cancel" autofocus>Cancelar</button>
+          <button value="ok">Confirmar</button>
+        </menu>
+      </form>
+    </dialog>
+
+    <script type="module" src="/src/main.js"></script>
+    <!-- Paso 6: expone los tools de la página a Claude Code, Claude Desktop, Cursor, etc. vía MCP-B -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/@mcp-b/webmcp-local-relay@6.0.3/dist/browser/embed.js"
+      integrity="sha384-xR0I1T8ge49Ji10bAlgc+TH+1Cqn57FNuNL5wRM/tjFYmpU2DxuEtMKlYz7cRCwZ"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
