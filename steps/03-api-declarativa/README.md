@@ -89,7 +89,7 @@ document.modelContext.addEventListener('toolchange', showToolCount);
 ```
 
 - `toolactivated` se dispara cada vez que un agente invoca un tool. En Chrome pasa con todos, no solo con los declarativos, así que filtramos por los que corresponden a un form. Es lo que alimenta el panel de "Actividad del agente".
-- `toolcancel` avisa cuando una ejecución se cancela, por ejemplo si se resetea el form.
+- `toolcancel` avisa cuando se cancela una invocación de un tool declarativo que estaba en curso, por ejemplo si el usuario resetea el form mientras el agente lo completa. Un `form.reset()` desde script no lo dispara.
 - `toolchange` se dispara cuando se registra o se da de baja un tool. `showToolCount` usa `getTools()` para mostrar cuántos hay en el badge; en el paso 6 volvemos sobre `getTools()`, que también sirve para consumir tools.
 
 ## 3.4 Feedback visual
